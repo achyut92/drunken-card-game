@@ -115,6 +115,46 @@ function winners(playerCount, players) {
     return winnersList;
 }
 
+function tieBreaker(winnersList, remainingCards, remainingCardsCount, remainingCardsStartIndex, playersName) {
+    let newWinnersList = [];
+    var newHighest = 0;
+
+    if (remainingCardsCount < winnersList.length || remainingCardsStartIndex + winnersList.length > remainingCardsCount) {
+
+        remainingCards = shuffleCards();
+        remainingCardsCount = 52;
+        tieBreaker(winnersList, remainingCards, remainingCardsCount, 0, playersName);
+    }
+
+    for (let i = 0; i < winnersList.length; i++) {
+        if (i == 0) {
+            newHighest = (remainingCards[i] % 13) + 1;
+            newWinnersList.push(winnersList[i]);
+        }
+        else {
+            if (((remainingCards[i] % 13) + 1) > newHighest) {
+                newHighest = (remainingCards[i] % 13) + 1;
+                newWinnersList = [];
+                newWinnersList.push(winnersList[i]);
+            }
+            else if (((remainingCards[i] % 13) + 1) == newHighest) {
+                newWinnersList.push(winnersList[i]);
+            }
+        }
+
+    }
+
+    if (newWinnersList.length == 1) {
+        console.log(`We have a winner to the Tie breaker and the Game: It's Player ${playersName[newWinnersList[0]].name}`);
+    }
+    else {
+        tieBreaker(newWinnersList, remainingCards, remainingCardsCount, remainingCardsStartIndex + winnersList.length, playersName);
+    }
+
+    return;
+
+}
+
 function shuffleCards() {
     let randomNumbers = [];
 
@@ -139,5 +179,6 @@ function getRandomInt(min, max) {
 module.exports = {
     distributeCards,
     rankPlayers,
-    winners
+    winners,
+    tieBreaker
 }
