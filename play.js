@@ -29,6 +29,92 @@ function distributeCards(playerCount, remainingCards, players) {
     return { remainingCards };
 }
 
+function rankPlayers(playerCount, players) {
+    let playersRank = [];
+
+    for (let i = 0; i < playerCount; i++) {
+        // var cards = playersCards[i];
+        var cards = players[i].cards;
+
+        // ALL same
+        if (((cards[0] + cards[1] + cards[2]) % cards[0] == 0) && ((cards[0] + cards[1] + cards[2]) / cards[0] == 3)) {
+            players[i].rank = 1;
+            continue;
+        }
+
+        // sequence
+        if ((cards[2] == cards[0] + 2) && (cards[1] == cards[0] + 1)) {
+            players[i].rank = 2;
+            continue;
+        }
+
+        //Two equal
+        if ((cards[0] == cards[1]) || (cards[1] == cards[2])) {
+            players[i].rank = 3;
+            continue;
+        }
+
+        //No special combination. Take the highest card.
+        players[i].rank = 4;
+    }
+
+    console.log("Ranking of the players are: ");
+    for (let i = 0; i < playerCount; i++) {
+        console.log(players[i].name + " : " + players[i].rank);
+    }
+
+    return playersRank;
+}
+
+function winners(playerCount, players) {
+
+    let highestRank = 0;
+    let winnersList = [];
+
+    for (let i = 0; i < playerCount; i++) {
+        if (i == 0) {
+            highestRank = players[i].rank;
+            winnersList.push(i);
+        }
+        else {
+            if (players[i].rank == highestRank) {
+                winnersList.push(i);
+            }
+            else if (players[i].rank < highestRank) {
+                winnersList = [];
+                winnersList.push(i);
+                highestRank = players[i].rank;
+            }
+        }
+    }
+
+    if (highestRank == 4 && winnersList.length > 1) {
+        let topCardVal = 0;
+        let topCardWinnersList = [];
+
+        for (let i = 0; i < winnersList.length; i++) {
+            if (i == 0) {
+                topCardVal = players[winnersList[i]].cards[2];
+                topCardWinnersList.push(winnersList[i]);
+            }
+            else {
+                if (players[winnersList[i]].cards[2] == topCardVal) {
+                    topCardWinnersList.push(winnersList[i]);
+                }
+                else if (players[winnersList[i]].cards[2] > topCardVal) {
+                    topCardVal = players[winnersList[i]].cards[2];
+                    topCardWinnersList = [];
+                    topCardWinnersList.push(winnersList[i]);
+                }
+            }
+        }
+        console.log('Top card value:', topCardVal);
+        return topCardWinnersList;
+    }
+
+    return winnersList;
+}
+
 function shuffleCards() {
     let randomNumbers = [];
 
@@ -51,5 +137,7 @@ function getRandomInt(min, max) {
 }
 
 module.exports = {
-    distributeCards
+    distributeCards,
+    rankPlayers,
+    winners
 }

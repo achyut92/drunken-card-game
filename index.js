@@ -1,4 +1,6 @@
-let { distributeCards } = require('./play');
+let { distributeCards,
+    rankPlayers,
+    winners } = require('./play');
 
 let Player = require('./player');
 let playerCount = 4;
@@ -10,3 +12,7 @@ for (let i = 0; i < playerCount; i++) {
 }
 
 let distributedCards = distributeCards(playerCount, [], players);
+
+let playersRank = rankPlayers(playerCount, players);
+
+let winnersList = winners(playerCount, players);
