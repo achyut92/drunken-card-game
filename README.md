@@ -1,5 +1,5 @@
 # drunken-card-game
 socash assingment
 
-##Run
+##Run  
 node index.js
